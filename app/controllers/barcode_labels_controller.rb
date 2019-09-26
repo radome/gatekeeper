@@ -13,9 +13,10 @@ class BarcodeLabelsController < ApplicationController
     render(
       json: { 'success' => 'Your barcodes have been printed' }
     )
-  rescue BarcodeSheet::PrintError
+  rescue BarcodeSheet::PrintError => exception
+    Rails.logger.error(exception.message)
     render(
-      json: { 'error' => 'There was a problem printing your barcodes.' }
+      json: { 'error' => "There was a problem printing your barcodes. #{exception.message}" }
     )
   rescue Errno::ECONNREFUSED
     render(
